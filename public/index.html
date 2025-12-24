@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>蛋小厨 - 项目文档中心</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #FF6B6B;
+      --primary-light: #FF8E53;
+      --bg: #F8F9FA;
+      --card: #FFFFFF;
+      --text: #333333;
+      --text-secondary: #666666;
+      --border: #E8E8E8;
+      --success: #52C41A;
+      --warning: #FAAD14;
+      --danger: #FF4D4F;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .sync-status {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    
+    .sync-status.syncing { animation: pulse 1s infinite; }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    /* Navigation */
+    .nav {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      position: sticky;
+      top: 108px;
+      z-index: 99;
+    }
+    
+    .nav-item {
+      padding: 16px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .nav-item:hover { color: var(--primary); }
+    
+    .nav-item.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+    
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    
+    .section { display: none; }
+    .section.active { display: block; }
+    
+    /* Cards */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-actions { display: flex; gap: 8px; }
+    
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-light); }
+    .btn-secondary { background: #F0F0F0; color: var(--text); }
+    .btn-secondary:hover:not(:disabled) { background: #E0E0E0; }
+    .btn-danger { background: #FFF1F0; color: var(--danger); }
+    .btn-danger:hover:not(:disabled) { background: #FFCCC7; }
+    .btn-success { background: #F6FFED; color: var(--success); }
+    .btn-success:hover:not(:disabled) { background: #D9F7BE; }
+    
+    /* Document List */
+    .doc-list { display: grid; gap: 16px; }
+    
+    .doc-item {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: #FAFAFA;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    
+    .doc-item:hover {
+      background: #FFF5F5;
+      border-color: var(--primary);
+    }
+    
+    .doc-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-right: 16px;
+    }
+    
+    .doc-icon.prd { background: #E6F7FF; }
+    .doc-icon.test { background: #FFF7E6; }
+    .doc-icon.marketing { background: #F6FFED; }
+    .doc-icon.design { background: #F9F0FF; }
+    .doc-icon.custom { background: #F0F0F0; }
+    
+    .doc-info { flex: 1; }
+    .doc-name { font-weight: 600; margin-bottom: 4px; }
+    
+    .doc-meta {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 12px;
+    }
+    
+    .doc-actions { display: flex; gap: 8px; }
+    
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 6px;
+    }
+    
+    .tag-p0 { background: #FFF1F0; color: #CF1322; }
+    .tag-p1 { background: #FFF7E6; color: #D46B08; }
+    .tag-p2 { background: #FFFBE6; color: #D4B106; }
+    .tag-p3 { background: #F6FFED; color: #389E0D; }
+    
+    /* Editor Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    
+    .modal {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      overflow: hidden;
+    }
+    
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title-input {
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      outline: none;
+      flex: 1;
+      margin-right: 16px;
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow: auto;
+      padding: 24px;
+    }
+    
+    .modal-textarea {
+      width: 100%;
+      min-height: 400px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.8;
+      resize: vertical;
+      outline: none;
+      font-family: inherit;
+    }
+    
+    .modal-textarea:focus { border-color: var(--primary); }
+    
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    /* Issue Table */
+    .issue-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .issue-table th, .issue-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .issue-table th {
+      background: #FAFAFA;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .issue-table tr:hover td { background: #FAFAFA; }
+    
+    /* Timeline */
+    .timeline {
+      padding-left: 24px;
+      border-left: 2px solid var(--border);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-bottom: 24px;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -29px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid white;
+    }
+    
+    .timeline-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    
+    .timeline-content {
+      background: #FAFAFA;
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+    
+    .loading-spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #333;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 2000;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error { background: var(--danger); }
+    .toast.success { background: var(--success); }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header { padding: 24px 16px; }
+      .header h1 { font-size: 22px; }
+      .sync-status { display: none; }
+      .container { padding: 16px; }
+      .card { padding: 16px; }
+      .doc-item { flex-wrap: wrap; }
+      .doc-actions { width: 100%; margin-top: 12px; justify-content: flex-end; }
+      .modal-overlay { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>🥚 蛋小厨 - 项目文档中心</h1>
+    <p>专注解决每天吃啥的世纪难题 | 云端协作文档平台</p>
+    <div class="sync-status" id="sync-status">☁️ 已连接云端</div>
+  </header>
+  
+  <nav class="nav">
+    <div class="nav-item active" data-section="overview">📊 项目概览</div>
+    <div class="nav-item" data-section="docs">📄 文档管理</div>
+    <div class="nav-item" data-section="issues">🐛 问题跟踪</div>
+    <div class="nav-item" data-section="changelog">📝 更新日志</div>
+  </nav>
+  
+  <main class="container">
+    <!-- 项目概览 -->
+    <section id="overview" class="section active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-docs">-</div>
+          <div class="stat-label">文档总数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-issues">-</div>
+          <div class="stat-label">待解决问题</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">v1.0</div>
+          <div class="stat-label">当前版本</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-progress">-</div>
+          <div class="stat-label">问题解决率</div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📋 项目信息</h2>
+        </div>
+        <table class="issue-table">
+          <tr><th style="width:120px">项目名称</th><td>蛋小厨</td></tr>
+          <tr><th>产品定位</th><td>基于微信小程序的群体用餐决策工具</td></tr>
+          <tr><th>核心功能</th><td>创建点餐投票 → 分享邀请 → 群体投票 → 结果统计</td></tr>
+          <tr><th>技术架构</th><td>微信小程序 + 云开发（云函数 + 云数据库）</td></tr>
+          <tr><th>数据同步</th><td>☁️ 云端实时同步，多人协作</td></tr>
+        </table>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">🚀 快速链接</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+          <button class="btn btn-primary" onclick="switchSection('docs')">📄 查看文档</button>
+          <button class="btn btn-secondary" onclick="switchSection('issues')">🐛 问题列表</button>
+          <button class="btn btn-secondary" onclick="switchSection('changelog')">📝 更新日志</button>
+          <button class="btn btn-success" onclick="openDocEditor()">➕ 新建文档</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 文档管理 -->
+    <section id="docs" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📄 文档列表</h2>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="loadDocuments()">🔄 刷新</button>
+            <button class="btn btn-primary" onclick="openDocEditor()">➕ 新建文档</button>
+          </div>
+        </div>
+        <div class="doc-list" id="doc-list">
+          <div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 问题跟踪 -->
+    <section id="issues" class="section">
+      <div class="stats-grid" id="issue-stats"></div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">🐛 问题列表</h2>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="loadIssues()">🔄 刷新</button>
+            <button class="btn btn-primary" onclick="openIssueEditor()">➕ 新增问题</button>
+          </div>
+        </div>
+        <table class="issue-table">
+          <thead>
+            <tr>
+              <th style="width:60px">优先级</th>
+              <th>问题描述</th>
+              <th style="width:100px">状态</th>
+              <th style="width:120px">操作</th>
+            </tr>
+          </thead>
+          <tbody id="issue-list">
+            <tr><td colspan="4" class="loading"><div class="loading-spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    
+    <!-- 更新日志 -->
+    <section id="changelog" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📝 更新日志</h2>
+          <div class="card-actions">
+            <button class="btn btn-secondary" onclick="loadChangelog()">🔄 刷新</button>
+            <button class="btn btn-primary" onclick="openChangelogEditor()">➕ 添加记录</button>
+          </div>
+        </div>
+        <div class="timeline" id="changelog-list">
+          <div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- 文档编辑器 -->
+  <div class="modal-overlay" id="doc-editor">
+    <div class="modal">
+      <div class="modal-header">
+        <input type="text" class="modal-title-input" id="doc-title" placeholder="文档标题">
+        <select id="doc-type" style="padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
+          <option value="prd">📘 PRD文档</option>
+          <option value="test">📋 测试报告</option>
+          <option value="marketing">📢 运营文档</option>
+          <option value="design">🎨 设计文档</option>
+          <option value="custom">📄 其他</option>
+        </select>
+      </div>
+      <div class="modal-body">
+        <textarea class="modal-textarea" id="doc-content" placeholder="在这里输入文档内容...支持 Markdown 格式"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeDocEditor()">取消</button>
+        <button class="btn btn-primary" id="doc-save-btn" onclick="saveDocument()">💾 保存文档</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 问题编辑器 -->
+  <div class="modal-overlay" id="issue-editor">
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 id="issue-editor-title">新增问题</h3>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">问题描述</label>
+          <input type="text" id="issue-title" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" placeholder="请输入问题描述">
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">优先级</label>
+          <select id="issue-priority" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <option value="p0">P0 - 严重问题</option>
+            <option value="p1">P1 - 重要问题</option>
+            <option value="p2" selected>P2 - 一般问题</option>
+            <option value="p3">P3 - 优化建议</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeIssueEditor()">取消</button>
+        <button class="btn btn-primary" onclick="saveIssue()">💾 保存</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 日志编辑器 -->
+  <div class="modal-overlay" id="changelog-editor">
+    <div class="modal" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>添加更新记录</h3>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">日期</label>
+          <input type="date" id="changelog-date" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">内容</label>
+          <textarea id="changelog-content" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 100px;" placeholder="请输入更新内容"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeChangelogEditor()">取消</button>
+        <button class="btn btn-primary" onclick="saveChangelog()">💾 保存</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  
+  <script>
+    // API 基础地址
+    const API_BASE = '';
+    
+    // 状态
+    let documents = [];
+    let issues = [];
+    let changelog = [];
+    let editingDocId = null;
+    let editingIssueId = null;
+    
+    // 工具函数
+    const $ = id => document.getElementById(id);
+    
+    function showToast(message, type = '') {
+      const toast = $('toast');
+      toast.textContent = message;
+      toast.className = 'toast show ' + type;
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+    
+    function setSyncStatus(status) {
+      const el = $('sync-status');
+      if (status === 'syncing') {
+        el.textContent = '🔄 同步中...';
+        el.className = 'sync-status syncing';
+      } else if (status === 'error') {
+        el.textContent = '❌ 连接失败';
+        el.className = 'sync-status';
+      } else {
+        el.textContent = '☁️ 已连接云端';
+        el.className = 'sync-status';
+      }
+    }
+    
+    async function api(method, path, data = null) {
+      setSyncStatus('syncing');
+      try {
+        const options = {
+          method,
+          headers: { 'Content-Type': 'application/json' }
+        };
+        if (data) options.body = JSON.stringify(data);
+        
+        const res = await fetch(API_BASE + path, options);
+        const json = await res.json();
+        
+        setSyncStatus('connected');
+        return json;
+      } catch (err) {
+        setSyncStatus('error');
+        console.error('API Error:', err);
+        throw err;
+      }
+    }
+    
+    // 导航切换
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => switchSection(item.dataset.section));
+    });
+    
+    function switchSection(section) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelector(`.nav-item[data-section="${section}"]`).classList.add('active');
+      $(section).classList.add('active');
+    }
+    
+    // ========== 文档管理 ==========
+    
+    async function loadDocuments() {
+      try {
+        const res = await api('GET', '/api/documents');
+        if (res.success) {
+          documents = res.data;
+          renderDocuments();
+        }
+      } catch (err) {
+        showToast('加载文档失败', 'error');
+      }
+    }
+    
+    function renderDocuments() {
+      const list = $('doc-list');
+      const typeIcons = { prd: '📘', test: '📋', marketing: '📢', design: '🎨', custom: '📄' };
+      const typeNames = { prd: 'PRD文档', test: '测试报告', marketing: '运营文档', design: '设计文档', custom: '其他' };
+      
+      if (documents.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📄</div><p>暂无文档，点击上方按钮新建</p></div>';
+        return;
+      }
+      
+      list.innerHTML = documents.map(doc => {
+        const date = new Date(doc.updatedAt).toLocaleDateString();
+        return `
+          <div class="doc-item" onclick="openDocEditor('${doc._id}')">
+            <div class="doc-icon ${doc.type}">${typeIcons[doc.type] || '📄'}</div>
+            <div class="doc-info">
+              <div class="doc-name">${doc.title}</div>
+              <div class="doc-meta">
+                <span>${typeNames[doc.type] || '文档'}</span>
+                <span>更新于 ${date}</span>
+              </div>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor('${doc._id}')">✏️ 编辑</button>
+              <button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument('${doc._id}')">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function openDocEditor(id = null) {
+      editingDocId = id;
+      const modal = $('doc-editor');
+      
+      if (id) {
+        const doc = documents.find(d => d._id === id);
+        if (doc) {
+          $('doc-title').value = doc.title;
+          $('doc-type').value = doc.type;
+          $('doc-content').value = doc.content;
+        }
+      } else {
+        $('doc-title').value = '';
+        $('doc-type').value = 'custom';
+        $('doc-content').value = '';
+      }
+      
+      modal.classList.add('active');
+    }
+    
+    function closeDocEditor() {
+      $('doc-editor').classList.remove('active');
+      editingDocId = null;
+    }
+    
+    async function saveDocument() {
+      const title = $('doc-title').value.trim();
+      const type = $('doc-type').value;
+      const content = $('doc-content').value;
+      
+      if (!title) {
+        showToast('请输入文档标题', 'error');
+        return;
+      }
+      
+      $('doc-save-btn').disabled = true;
+      
+      try {
+        if (editingDocId) {
+          await api('PUT', `/api/documents/${editingDocId}`, { title, type, content });
+          showToast('文档已更新', 'success');
+        } else {
+          await api('POST', '/api/documents', { title, type, content });
+          showToast('文档已创建', 'success');
+        }
+        
+        closeDocEditor();
+        loadDocuments();
+        loadStats();
+      } catch (err) {
+        showToast('保存失败', 'error');
+      } finally {
+        $('doc-save-btn').disabled = false;
+      }
+    }
+    
+    async function deleteDocument(id) {
+      if (!confirm('确定要删除这个文档吗？')) return;
+      
+      try {
+        await api('DELETE', `/api/documents/${id}`);
+        showToast('文档已删除', 'success');
+        loadDocuments();
+        loadStats();
+      } catch (err) {
+        showToast('删除失败', 'error');
+      }
+    }
+    
+    // ========== 问题跟踪 ==========
+    
+    async function loadIssues() {
+      try {
+        const res = await api('GET', '/api/issues');
+        if (res.success) {
+          issues = res.data;
+          renderIssues();
+        }
+      } catch (err) {
+        showToast('加载问题列表失败', 'error');
+      }
+    }
+    
+    function renderIssues() {
+      // 统计
+      const counts = { p0: 0, p1: 0, p2: 0, p3: 0 };
+      issues.forEach(i => { if (counts[i.priority] !== undefined) counts[i.priority]++; });
+      
+      $('issue-stats').innerHTML = `
+        <div class="stat-card"><div class="stat-value"><span class="tag tag-p0">P0</span> ${counts.p0}</div><div class="stat-label">严重问题</div></div>
+        <div class="stat-card"><div class="stat-value"><span class="tag tag-p1">P1</span> ${counts.p1}</div><div class="stat-label">重要问题</div></div>
+        <div class="stat-card"><div class="stat-value"><span class="tag tag-p2">P2</span> ${counts.p2}</div><div class="stat-label">一般问题</div></div>
+        <div class="stat-card"><div class="stat-value"><span class="tag tag-p3">P3</span> ${counts.p3}</div><div class="stat-label">优化建议</div></div>
+      `;
+      
+      // 列表
+      const statusText = {
+        open: '<span style="color:#FAAD14">⏳ 待处理</span>',
+        doing: '<span style="color:#1890FF">🔧 进行中</span>',
+        done: '<span style="color:#52C41A">✅ 已完成</span>'
+      };
+      
+      $('issue-list').innerHTML = issues.map(issue => `
+        <tr>
+          <td><span class="tag tag-${issue.priority}">${issue.priority.toUpperCase()}</span></td>
+          <td>${issue.title}</td>
+          <td>${statusText[issue.status] || statusText.open}</td>
+          <td>
+            <select onchange="updateIssueStatus('${issue._id}', this.value)" style="padding:4px 8px;border-radius:4px;border:1px solid #ddd;">
+              <option value="open" ${issue.status === 'open' ? 'selected' : ''}>待处理</option>
+              <option value="doing" ${issue.status === 'doing' ? 'selected' : ''}>进行中</option>
+              <option value="done" ${issue.status === 'done' ? 'selected' : ''}>已完成</option>
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function openIssueEditor() {
+      editingIssueId = null;
+      $('issue-editor-title').textContent = '新增问题';
+      $('issue-title').value = '';
+      $('issue-priority').value = 'p2';
+      $('issue-editor').classList.add('active');
+    }
+    
+    function closeIssueEditor() {
+      $('issue-editor').classList.remove('active');
+    }
+    
+    async function saveIssue() {
+      const title = $('issue-title').value.trim();
+      const priority = $('issue-priority').value;
+      
+      if (!title) {
+        showToast('请输入问题描述', 'error');
+        return;
+      }
+      
+      try {
+        await api('POST', '/api/issues', { title, priority });
+        showToast('问题已添加', 'success');
+        closeIssueEditor();
+        loadIssues();
+        loadStats();
+      } catch (err) {
+        showToast('保存失败', 'error');
+      }
+    }
+    
+    async function updateIssueStatus(id, status) {
+      try {
+        await api('PUT', `/api/issues/${id}`, { status });
+        showToast('状态已更新', 'success');
+        loadIssues();
+        loadStats();
+      } catch (err) {
+        showToast('更新失败', 'error');
+      }
+    }
+    
+    // ========== 更新日志 ==========
+    
+    async function loadChangelog() {
+      try {
+        const res = await api('GET', '/api/changelog');
+        if (res.success) {
+          changelog = res.data;
+          renderChangelog();
+        }
+      } catch (err) {
+        showToast('加载更新日志失败', 'error');
+      }
+    }
+    
+    function renderChangelog() {
+      if (changelog.length === 0) {
+        $('changelog-list').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><p>暂无更新记录</p></div>';
+        return;
+      }
+      
+      $('changelog-list').innerHTML = changelog.map(log => `
+        <div class="timeline-item">
+          <div class="timeline-date">${log.date}</div>
+          <div class="timeline-content">
+            <span>${log.content}</span>
+            <button class="btn btn-danger" style="padding:4px 8px;font-size:12px;" onclick="deleteChangelog('${log._id}')">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function openChangelogEditor() {
+      $('changelog-date').value = new Date().toISOString().split('T')[0];
+      $('changelog-content').value = '';
+      $('changelog-editor').classList.add('active');
+    }
+    
+    function closeChangelogEditor() {
+      $('changelog-editor').classList.remove('active');
+    }
+    
+    async function saveChangelog() {
+      const date = $('changelog-date').value;
+      const content = $('changelog-content').value.trim();
+      
+      if (!content) {
+        showToast('请输入更新内容', 'error');
+        return;
+      }
+      
+      try {
+        await api('POST', '/api/changelog', { date, content });
+        showToast('记录已添加', 'success');
+        closeChangelogEditor();
+        loadChangelog();
+      } catch (err) {
+        showToast('保存失败', 'error');
+      }
+    }
+    
+    async function deleteChangelog(id) {
+      if (!confirm('确定要删除这条记录吗？')) return;
+      
+      try {
+        await api('DELETE', `/api/changelog/${id}`);
+        showToast('记录已删除', 'success');
+        loadChangelog();
+      } catch (err) {
+        showToast('删除失败', 'error');
+      }
+    }
+    
+    // ========== 统计 ==========
+    
+    async function loadStats() {
+      try {
+        const res = await api('GET', '/api/stats');
+        if (res.success) {
+          $('stat-docs').textContent = res.data.totalDocs;
+          $('stat-issues').textContent = res.data.openIssues;
+          $('stat-progress').textContent = res.data.progress + '%';
+        }
+      } catch (err) {
+        console.error('加载统计失败', err);
+      }
+    }
+    
+    // ========== 初始化 ==========
+    
+    async function init() {
+      // 首先尝试初始化默认数据
+      try {
+        await api('POST', '/api/init');
+      } catch (err) {
+        console.log('初始化检查完成');
+      }
+      
+      // 加载所有数据
+      await Promise.all([
+        loadStats(),
+        loadDocuments(),
+        loadIssues(),
+        loadChangelog()
+      ]);
+    }
+    
+    // 点击外部关闭弹窗
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+    
+    // 启动
+    init();
+  </script>
+</body>
+</html>
