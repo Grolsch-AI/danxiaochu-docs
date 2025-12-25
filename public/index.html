@@ -649,16 +649,36 @@
     function api(action, data) {
       setSyncStatus('syncing');
       
-      // 构建 URL 参数
-      var url = API_URL + '?action=' + encodeURIComponent(action);
-      if (data) {
-        url += '&data=' + encodeURIComponent(JSON.stringify(data));
+      // 判断数据大小，大数据用POST，小数据用GET
+      var dataStr = data ? JSON.stringify(data) : '';
+      var usePOST = dataStr.length > 2000; // 超过2KB用POST
+      
+      var url, fetchOptions;
+      
+      if (usePOST) {
+        // POST 请求
+        url = API_URL + '?action=' + encodeURIComponent(action);
+        fetchOptions = {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: dataStr
+        };
+      } else {
+        // GET 请求
+        url = API_URL + '?action=' + encodeURIComponent(action);
+        if (data) {
+          url += '&data=' + encodeURIComponent(dataStr);
+        }
+        fetchOptions = {
+          method: 'GET',
+          mode: 'cors'
+        };
       }
       
-      return fetch(url, {
-        method: 'GET',
-        mode: 'cors'
-      })
+      return fetch(url, fetchOptions)
       .then(function(res) { return res.json(); })
       .then(function(json) {
         setSyncStatus('connected');
