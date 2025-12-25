@@ -1155,9 +1155,13 @@
       
       var action = editingDocId ? 'updateDocument' : 'createDocument';
       var data = { title: title, type: type, content: content };
-      if (parentId && type !== 'folder') {
-        data.parentId = parentId;
+      
+      // 处理parentId（文件夹类型不需要parentId）
+      if (type !== 'folder') {
+        // 始终传递parentId，空字符串表示移除归属
+        data.parentId = parentId || '';
       }
+      
       if (editingDocId) data.id = editingDocId;
       
       api(action, data)
