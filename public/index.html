@@ -525,6 +525,7 @@
           <span class="doc-type" id="reader-doc-type">PRD</span>
         </div>
         <div class="reader-actions">
+          <button class="btn btn-primary" onclick="copyDocLink()" id="copy-link-btn">🔗 复制链接</button>
           <button class="btn btn-secondary" onclick="openDocEditor(currentReadingDocId)">✏️ 编辑</button>
           <button class="btn btn-secondary" onclick="closeReader()">✕ 关闭</button>
         </div>
@@ -718,6 +719,10 @@
       $('reader-doc-type').textContent = typeNames[doc.type] || '文档';
       $('reader-body').innerHTML = marked.parse(doc.content || '');
       
+      // 更新URL，添加文档ID
+      history.pushState({ docId: docId }, doc.title, '?doc=' + docId);
+      document.title = doc.title + ' - 蛋小厨文档中心';
+      
       generateTOC();
       $('reader').classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -728,7 +733,76 @@
       $('reader').classList.remove('active');
       document.body.style.overflow = '';
       currentReadingDocId = null;
+      // 恢复URL
+      history.pushState({}, '蛋小厨 - 项目文档中心', window.location.pathname);
+      document.title = '蛋小厨 - 项目文档中心';
     }
+    
+    // 复制文档链接
+    function copyDocLink() {
+      if (!currentReadingDocId) return;
+      var url = window.location.origin + window.location.pathname + '?doc=' + currentReadingDocId;
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          showToast('链接已复制', 'success');
+        }).catch(function() {
+          fallbackCopy(url);
+        });
+      } else {
+        fallbackCopy(url);
+      }
+    }
+    
+    function fallbackCopy(text) {
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('链接已复制', 'success');
+      } catch (e) {
+        showToast('复制失败，请手动复制', 'error');
+        prompt('请复制以下链接:', text);
+      }
+      document.body.removeChild(textarea);
+    }
+    
+    // 检查URL参数，自动打开文档
+    function checkUrlAndOpenDoc() {
+      var params = new URLSearchParams(window.location.search);
+      var docId = params.get('doc');
+      if (docId && documents.length > 0) {
+        var doc = documents.find(function(d) { return d._id === docId; });
+        if (doc) {
+          openReader(docId);
+        }
+      }
+    }
+    
+    // 监听浏览器前进后退
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.docId) {
+        var doc = documents.find(function(d) { return d._id === e.state.docId; });
+        if (doc) {
+          currentReadingDocId = e.state.docId;
+          var typeNames = { prd: 'PRD文档', test: '测试报告', marketing: '运营文档', design: '设计文档', custom: '其他' };
+          $('reader-doc-title').textContent = doc.title;
+          $('reader-doc-type').textContent = typeNames[doc.type] || '文档';
+          $('reader-body').innerHTML = marked.parse(doc.content || '');
+          generateTOC();
+          $('reader').classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      } else {
+        $('reader').classList.remove('active');
+        document.body.style.overflow = '';
+        currentReadingDocId = null;
+      }
+    });
     
     function generateTOC() {
       var headings = $('reader-body').querySelectorAll('h1, h2, h3');
@@ -777,10 +851,11 @@
     
     // ==================== 文档管理 ====================
     function loadDocuments() {
-      api('getDocuments')
+      return api('getDocuments')
         .then(function(res) {
           documents = res.data;
           renderDocuments();
+          return res;
         })
         .catch(function() { showToast('加载文档失败', 'error'); });
     }
@@ -804,11 +879,43 @@
             '<div class="doc-meta"><span>' + (typeNames[doc.type] || '文档') + '</span><span>更新于 ' + date + '</span></div>' +
           '</div>' +
           '<div class="doc-actions">' +
+            '<button class="btn btn-secondary" onclick="event.stopPropagation(); copyShareLink(\'' + doc._id + '\')" title="复制分享链接">🔗</button>' +
             '<button class="btn btn-secondary" onclick="event.stopPropagation(); openReader(\'' + doc._id + '\')">👁️ 阅读</button>' +
             '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + doc._id + '\')">✏️ 编辑</button>' +
             '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + doc._id + '\')">🗑️</button>' +
           '</div></div>';
       }).join('');
+    }
+    
+    // 复制分享链接
+    function copyShareLink(docId) {
+      var url = window.location.origin + window.location.pathname.replace('index.html', '') + 'doc.html?id=' + docId;
+      
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function() {
+          showToast('分享链接已复制', 'success');
+        }).catch(function() {
+          fallbackCopyShare(url);
+        });
+      } else {
+        fallbackCopyShare(url);
+      }
+    }
+    
+    function fallbackCopyShare(text) {
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast('分享链接已复制', 'success');
+      } catch (e) {
+        prompt('请复制以下链接:', text);
+      }
+      document.body.removeChild(textarea);
     }
     
     function openDocEditor(id) {
@@ -974,7 +1081,10 @@
     function init() {
       api('initData').catch(function() { console.log('初始化检查完成'); });
       loadStats();
-      loadDocuments();
+      loadDocuments().then(function() {
+        // 文档加载完成后检查URL参数
+        checkUrlAndOpenDoc();
+      });
       loadIssues();
       loadChangelog();
     }
