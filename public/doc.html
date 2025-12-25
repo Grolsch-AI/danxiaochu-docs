@@ -250,6 +250,10 @@
       <div class="doc-meta">
         <h1 class="doc-title" id="doc-title"></h1>
         <div class="doc-info">
+          <div class="doc-info-item" id="doc-folder-item" style="display: none;">
+            <span>📁</span>
+            <span id="doc-folder"></span>
+          </div>
           <div class="doc-info-item">
             <span class="doc-type-badge" id="doc-type-badge"></span>
           </div>
@@ -350,6 +354,18 @@
       $('doc-type-badge').className = 'doc-type-badge ' + doc.type;
       $('doc-date').textContent = '更新于 ' + new Date(doc.updatedAt).toLocaleDateString();
       $('doc-body').innerHTML = marked.parse(doc.content || '');
+      
+      // 如果有父文件夹，加载并显示
+      if (doc.parentId) {
+        fetch(API_URL + '?action=getDocument&data=' + encodeURIComponent(JSON.stringify({ id: doc.parentId })))
+          .then(function(res) { return res.json(); })
+          .then(function(json) {
+            if (json.success && json.data) {
+              $('doc-folder').textContent = json.data.title;
+              $('doc-folder-item').style.display = 'flex';
+            }
+          });
+      }
       
       // 添加纯文本内容（方便AI读取）
       $('plain-text').innerHTML = 

@@ -144,6 +144,80 @@
     
     .doc-item:hover { background: #FFF5F5; border-color: var(--primary); }
     
+    /* 文件夹样式 */
+    .folder-item {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .folder-header {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .folder-header:hover { background: #FAFAFA; }
+    .folder-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #FFE082, #FFB300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-right: 14px;
+    }
+    .folder-info { flex: 1; }
+    .folder-name { font-weight: 600; font-size: 15px; }
+    .folder-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .folder-toggle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: transform 0.2s;
+      margin-right: 12px;
+    }
+    .folder-toggle.expanded { transform: rotate(90deg); }
+    .folder-actions { display: flex; gap: 6px; }
+    .folder-children {
+      display: none;
+      padding: 0 20px 16px 74px;
+      border-top: 1px solid var(--border);
+      background: #FAFAFA;
+    }
+    .folder-children.expanded { display: block; }
+    .folder-children .doc-item {
+      margin: 8px 0;
+      padding: 12px 16px;
+      background: white;
+    }
+    .folder-children .doc-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      margin-right: 12px;
+    }
+    .child-doc-hint {
+      font-size: 11px;
+      color: var(--text-secondary);
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-left: 8px;
+    }
+    
+    /* 独立文档（无父文件夹） */
+    .standalone-docs { margin-top: 20px; }
+    .standalone-docs-title {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+    
     .doc-icon {
       width: 48px;
       height: 48px;
@@ -547,9 +621,16 @@
           <option value="marketing">📢 运营文档</option>
           <option value="design">🎨 设计文档</option>
           <option value="custom">📄 其他</option>
+          <option value="folder">📁 文件夹</option>
         </select>
       </div>
       <div class="modal-body">
+        <div id="parent-folder-row" style="margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #eee;">
+          <label style="display: block; margin-bottom: 8px; font-size: 13px; color: #666;">📁 所属文件夹（可选）</label>
+          <select id="doc-parent" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <option value="">无（独立文档）</option>
+          </select>
+        </div>
         <textarea class="modal-textarea" id="doc-content" placeholder="在这里输入文档内容...支持 Markdown 格式"></textarea>
       </div>
       <div class="modal-footer">
@@ -862,30 +943,142 @@
     
     function renderDocuments() {
       var list = $('doc-list');
-      var typeIcons = { prd: '📘', test: '📋', marketing: '📢', design: '🎨', custom: '📄' };
-      var typeNames = { prd: 'PRD文档', test: '测试报告', marketing: '运营文档', design: '设计文档', custom: '其他' };
+      var typeIcons = { prd: '📘', test: '📋', marketing: '📢', design: '🎨', custom: '📄', folder: '📁' };
+      var typeNames = { prd: 'PRD文档', test: '测试报告', marketing: '运营文档', design: '设计文档', custom: '其他', folder: '文件夹' };
       
       if (documents.length === 0) {
         list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📄</div><p>暂无文档，点击上方按钮新建</p></div>';
         return;
       }
       
-      list.innerHTML = documents.map(function(doc) {
-        var date = new Date(doc.updatedAt).toLocaleDateString();
-        return '<div class="doc-item">' +
-          '<div class="doc-icon ' + doc.type + '" onclick="openReader(\'' + doc._id + '\')">' + (typeIcons[doc.type] || '📄') + '</div>' +
-          '<div class="doc-info" onclick="openReader(\'' + doc._id + '\')">' +
-            '<div class="doc-name">' + doc.title + '</div>' +
-            '<div class="doc-meta"><span>' + (typeNames[doc.type] || '文档') + '</span><span>更新于 ' + date + '</span></div>' +
+      // 分离文件夹和普通文档
+      var folders = documents.filter(function(d) { return d.type === 'folder'; });
+      var standaloneDocs = documents.filter(function(d) { return d.type !== 'folder' && !d.parentId; });
+      var childDocs = documents.filter(function(d) { return d.type !== 'folder' && d.parentId; });
+      
+      var html = '';
+      
+      // 渲染文件夹
+      folders.forEach(function(folder) {
+        var children = childDocs.filter(function(d) { return d.parentId === folder._id; });
+        var date = new Date(folder.updatedAt).toLocaleDateString();
+        
+        html += '<div class="folder-item">' +
+          '<div class="folder-header" onclick="toggleFolder(\'' + folder._id + '\')">' +
+            '<span class="folder-toggle" id="toggle-' + folder._id + '">▶</span>' +
+            '<div class="folder-icon">📁</div>' +
+            '<div class="folder-info">' +
+              '<div class="folder-name">' + folder.title + '</div>' +
+              '<div class="folder-meta">' + children.length + ' 个文档 · 更新于 ' + date + '</div>' +
+            '</div>' +
+            '<div class="folder-actions">' +
+              '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditorInFolder(\'' + folder._id + '\')" title="在此文件夹新建文档">➕</button>' +
+              '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + folder._id + '\')">✏️</button>' +
+              '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + folder._id + '\')">🗑️</button>' +
+            '</div>' +
           '</div>' +
-          '<div class="doc-actions">' +
-            '<button class="btn btn-secondary" onclick="event.stopPropagation(); copyShareLink(\'' + doc._id + '\')" title="复制分享链接">🔗</button>' +
-            '<button class="btn btn-secondary" onclick="event.stopPropagation(); openReader(\'' + doc._id + '\')">👁️ 阅读</button>' +
-            '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + doc._id + '\')">✏️ 编辑</button>' +
-            '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + doc._id + '\')">🗑️</button>' +
-          '</div></div>';
-      }).join('');
+          '<div class="folder-children" id="children-' + folder._id + '">';
+        
+        if (children.length === 0) {
+          html += '<div style="padding: 20px; text-align: center; color: #999; font-size: 13px;">📄 文件夹为空，点击 ➕ 添加文档</div>';
+        } else {
+          children.forEach(function(doc) {
+            var docDate = new Date(doc.updatedAt).toLocaleDateString();
+            html += '<div class="doc-item">' +
+              '<div class="doc-icon ' + doc.type + '" onclick="openReader(\'' + doc._id + '\')">' + (typeIcons[doc.type] || '📄') + '</div>' +
+              '<div class="doc-info" onclick="openReader(\'' + doc._id + '\')">' +
+                '<div class="doc-name">' + doc.title + '</div>' +
+                '<div class="doc-meta"><span>' + (typeNames[doc.type] || '文档') + '</span><span>更新于 ' + docDate + '</span></div>' +
+              '</div>' +
+              '<div class="doc-actions">' +
+                '<button class="btn btn-secondary" onclick="event.stopPropagation(); copyShareLink(\'' + doc._id + '\')" title="复制分享链接">🔗</button>' +
+                '<button class="btn btn-secondary" onclick="event.stopPropagation(); openReader(\'' + doc._id + '\')">👁️</button>' +
+                '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + doc._id + '\')">✏️</button>' +
+                '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + doc._id + '\')">🗑️</button>' +
+              '</div></div>';
+          });
+        }
+        
+        html += '</div></div>';
+      });
+      
+      // 渲染独立文档
+      if (standaloneDocs.length > 0) {
+        if (folders.length > 0) {
+          html += '<div class="standalone-docs"><div class="standalone-docs-title">📄 未归类文档</div>';
+        }
+        
+        standaloneDocs.forEach(function(doc) {
+          var date = new Date(doc.updatedAt).toLocaleDateString();
+          html += '<div class="doc-item">' +
+            '<div class="doc-icon ' + doc.type + '" onclick="openReader(\'' + doc._id + '\')">' + (typeIcons[doc.type] || '📄') + '</div>' +
+            '<div class="doc-info" onclick="openReader(\'' + doc._id + '\')">' +
+              '<div class="doc-name">' + doc.title + '</div>' +
+              '<div class="doc-meta"><span>' + (typeNames[doc.type] || '文档') + '</span><span>更新于 ' + date + '</span></div>' +
+            '</div>' +
+            '<div class="doc-actions">' +
+              '<button class="btn btn-secondary" onclick="event.stopPropagation(); copyShareLink(\'' + doc._id + '\')" title="复制分享链接">🔗</button>' +
+              '<button class="btn btn-secondary" onclick="event.stopPropagation(); openReader(\'' + doc._id + '\')">👁️ 阅读</button>' +
+              '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + doc._id + '\')">✏️ 编辑</button>' +
+              '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + doc._id + '\')">🗑️</button>' +
+            '</div></div>';
+        });
+        
+        if (folders.length > 0) {
+          html += '</div>';
+        }
+      }
+      
+      list.innerHTML = html;
+      
+      // 更新父文件夹选择器
+      updateParentFolderSelect();
     }
+    
+    // 切换文件夹展开/收起
+    function toggleFolder(folderId) {
+      var children = $('children-' + folderId);
+      var toggle = $('toggle-' + folderId);
+      if (children.classList.contains('expanded')) {
+        children.classList.remove('expanded');
+        toggle.classList.remove('expanded');
+      } else {
+        children.classList.add('expanded');
+        toggle.classList.add('expanded');
+      }
+    }
+    
+    // 在指定文件夹中新建文档
+    function openDocEditorInFolder(folderId) {
+      openDocEditor(null);
+      $('doc-parent').value = folderId;
+      // 展开该文件夹
+      var children = $('children-' + folderId);
+      var toggle = $('toggle-' + folderId);
+      if (children && !children.classList.contains('expanded')) {
+        children.classList.add('expanded');
+        toggle.classList.add('expanded');
+      }
+    }
+    
+    // 更新父文件夹下拉选择器
+    function updateParentFolderSelect() {
+      var select = $('doc-parent');
+      var folders = documents.filter(function(d) { return d.type === 'folder'; });
+      
+      select.innerHTML = '<option value="">无（独立文档）</option>';
+      folders.forEach(function(folder) {
+        select.innerHTML += '<option value="' + folder._id + '">📁 ' + folder.title + '</option>';
+      });
+    }
+    
+    // 文档类型改变时处理
+    $('doc-type').addEventListener('change', function() {
+      var isFolder = this.value === 'folder';
+      $('parent-folder-row').style.display = isFolder ? 'none' : 'block';
+      $('doc-content').style.display = isFolder ? 'none' : 'block';
+      $('doc-content').placeholder = isFolder ? '' : '在这里输入文档内容...支持 Markdown 格式';
+    });
     
     // 复制分享链接
     function copyShareLink(docId) {
@@ -922,17 +1115,29 @@
       editingDocId = id || null;
       closeReader();
       
+      // 更新父文件夹选择器
+      updateParentFolderSelect();
+      
       if (id) {
         var doc = documents.find(function(d) { return d._id === id; });
         if (doc) {
           $('doc-title').value = doc.title;
           $('doc-type').value = doc.type;
-          $('doc-content').value = doc.content;
+          $('doc-content').value = doc.content || '';
+          $('doc-parent').value = doc.parentId || '';
+          
+          // 处理文件夹类型
+          var isFolder = doc.type === 'folder';
+          $('parent-folder-row').style.display = isFolder ? 'none' : 'block';
+          $('doc-content').style.display = isFolder ? 'none' : 'block';
         }
       } else {
         $('doc-title').value = '';
         $('doc-type').value = 'custom';
         $('doc-content').value = '';
+        $('doc-parent').value = '';
+        $('parent-folder-row').style.display = 'block';
+        $('doc-content').style.display = 'block';
       }
       $('doc-editor').classList.add('active');
     }
@@ -943,12 +1148,16 @@
       var title = $('doc-title').value.trim();
       var type = $('doc-type').value;
       var content = $('doc-content').value;
+      var parentId = $('doc-parent').value;
       
       if (!title) { showToast('请输入文档标题', 'error'); return; }
       $('doc-save-btn').disabled = true;
       
       var action = editingDocId ? 'updateDocument' : 'createDocument';
       var data = { title: title, type: type, content: content };
+      if (parentId && type !== 'folder') {
+        data.parentId = parentId;
+      }
       if (editingDocId) data.id = editingDocId;
       
       api(action, data)
@@ -963,9 +1172,22 @@
     }
     
     function deleteDocument(id) {
-      if (!confirm('确定要删除这个文档吗？')) return;
+      var doc = documents.find(function(d) { return d._id === id; });
+      var isFolder = doc && doc.type === 'folder';
+      var children = isFolder ? documents.filter(function(d) { return d.parentId === id; }) : [];
+      
+      var msg = isFolder && children.length > 0 
+        ? '此文件夹包含 ' + children.length + ' 个文档，删除文件夹后这些文档将变为独立文档。确定删除吗？'
+        : '确定要删除这个' + (isFolder ? '文件夹' : '文档') + '吗？';
+      
+      if (!confirm(msg)) return;
+      
       api('deleteDocument', { id: id })
-        .then(function() { showToast('文档已删除', 'success'); loadDocuments(); loadStats(); })
+        .then(function() { 
+          showToast((isFolder ? '文件夹' : '文档') + '已删除', 'success'); 
+          loadDocuments(); 
+          loadStats(); 
+        })
         .catch(function() { showToast('删除失败', 'error'); });
     }
     
