@@ -28,7 +28,6 @@
       line-height: 1.6;
     }
     
-    /* Header */
     .header {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
@@ -40,15 +39,8 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
-    .header h1 {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-    
-    .header p {
-      opacity: 0.9;
-      font-size: 14px;
-    }
+    .header h1 { font-size: 28px; margin-bottom: 8px; }
+    .header p { opacity: 0.9; font-size: 14px; }
     
     .sync-status {
       position: absolute;
@@ -62,13 +54,10 @@
     }
     
     .sync-status.syncing { animation: pulse 1s infinite; }
+    .sync-status.error { background: rgba(255,0,0,0.3); }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     
-    /* Navigation */
     .nav {
       background: white;
       border-bottom: 1px solid var(--border);
@@ -92,24 +81,12 @@
     }
     
     .nav-item:hover { color: var(--primary); }
+    .nav-item.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
     
-    .nav-item.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 600;
-    }
-    
-    /* Main Content */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
     .section { display: none; }
     .section.active { display: block; }
     
-    /* Cards */
     .card {
       background: var(--card);
       border-radius: 12px;
@@ -128,17 +105,9 @@
       border-bottom: 1px solid var(--border);
     }
     
-    .card-title {
-      font-size: 18px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
+    .card-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
     .card-actions { display: flex; gap: 8px; }
     
-    /* Buttons */
     .btn {
       padding: 8px 16px;
       border-radius: 8px;
@@ -151,11 +120,7 @@
       transition: all 0.2s;
     }
     
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover:not(:disabled) { background: var(--primary-light); }
     .btn-secondary { background: #F0F0F0; color: var(--text); }
@@ -165,7 +130,6 @@
     .btn-success { background: #F6FFED; color: var(--success); }
     .btn-success:hover:not(:disabled) { background: #D9F7BE; }
     
-    /* Document List */
     .doc-list { display: grid; gap: 16px; }
     
     .doc-item {
@@ -178,10 +142,7 @@
       border: 1px solid transparent;
     }
     
-    .doc-item:hover {
-      background: #FFF5F5;
-      border-color: var(--primary);
-    }
+    .doc-item:hover { background: #FFF5F5; border-color: var(--primary); }
     
     .doc-icon {
       width: 48px;
@@ -203,49 +164,26 @@
     
     .doc-info { flex: 1; cursor: pointer; }
     .doc-name { font-weight: 600; margin-bottom: 4px; }
-    
-    .doc-meta {
-      font-size: 12px;
-      color: var(--text-secondary);
-      display: flex;
-      gap: 12px;
-    }
-    
+    .doc-meta { font-size: 12px; color: var(--text-secondary); display: flex; gap: 12px; }
     .doc-actions { display: flex; gap: 8px; }
     
-    /* Tags */
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      margin-right: 6px;
-    }
-    
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; }
     .tag-p0 { background: #FFF1F0; color: #CF1322; }
     .tag-p1 { background: #FFF7E6; color: #D46B08; }
     .tag-p2 { background: #FFFBE6; color: #D4B106; }
     .tag-p3 { background: #F6FFED; color: #389E0D; }
     
-    /* Editor Modal */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.5);
       z-index: 1000;
       padding: 40px;
       overflow-y: auto;
     }
     
-    .modal-overlay.active {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
+    .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
     
     .modal {
       background: white;
@@ -276,11 +214,7 @@
       margin-right: 16px;
     }
     
-    .modal-body {
-      flex: 1;
-      overflow: auto;
-      padding: 24px;
-    }
+    .modal-body { flex: 1; overflow: auto; padding: 24px; }
     
     .modal-textarea {
       width: 100%;
@@ -305,7 +239,6 @@
       gap: 12px;
     }
     
-    /* Stats */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -313,57 +246,17 @@
       margin-bottom: 24px;
     }
     
-    .stat-card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid var(--border);
-    }
+    .stat-card { background: white; border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
+    .stat-value { font-size: 32px; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
     
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    
-    .stat-label {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    
-    /* Issue Table */
-    .issue-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    .issue-table th, .issue-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .issue-table th {
-      background: #FAFAFA;
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
-    
+    .issue-table { width: 100%; border-collapse: collapse; }
+    .issue-table th, .issue-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .issue-table th { background: #FAFAFA; font-weight: 600; font-size: 13px; color: var(--text-secondary); }
     .issue-table tr:hover td { background: #FAFAFA; }
     
-    /* Timeline */
-    .timeline {
-      padding-left: 24px;
-      border-left: 2px solid var(--border);
-    }
-    
-    .timeline-item {
-      position: relative;
-      padding-bottom: 24px;
-    }
-    
+    .timeline { padding-left: 24px; border-left: 2px solid var(--border); }
+    .timeline-item { position: relative; padding-bottom: 24px; }
     .timeline-item::before {
       content: '';
       position: absolute;
@@ -375,13 +268,7 @@
       background: var(--primary);
       border: 2px solid white;
     }
-    
-    .timeline-date {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 4px;
-    }
-    
+    .timeline-date { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
     .timeline-content {
       background: #FAFAFA;
       padding: 12px 16px;
@@ -391,13 +278,7 @@
       align-items: center;
     }
     
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-secondary);
-    }
-    
+    .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
     .loading-spinner {
       display: inline-block;
       width: 24px;
@@ -407,24 +288,11 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+    .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
     
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-    }
-    
-    .empty-state-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-    
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -438,33 +306,21 @@
       transition: all 0.3s;
       z-index: 2000;
     }
-    
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-    
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     .toast.error { background: var(--danger); }
     .toast.success { background: var(--success); }
     
-    /* ==================== 阅读模式样式 ==================== */
+    /* 阅读模式 */
     .reader-container {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: #FAFAFA;
       z-index: 2000;
       overflow: hidden;
     }
+    .reader-container.active { display: flex; }
     
-    .reader-container.active {
-      display: flex;
-    }
-    
-    /* 侧边栏目录 */
     .reader-sidebar {
       width: 280px;
       background: white;
@@ -473,7 +329,6 @@
       flex-direction: column;
       flex-shrink: 0;
     }
-    
     .reader-sidebar-header {
       padding: 20px;
       border-bottom: 1px solid var(--border);
@@ -481,13 +336,7 @@
       color: var(--text-secondary);
       font-size: 14px;
     }
-    
-    .reader-toc {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 0;
-    }
-    
+    .reader-toc { flex: 1; overflow-y: auto; padding: 12px 0; }
     .toc-item {
       padding: 10px 20px;
       cursor: pointer;
@@ -496,30 +345,12 @@
       border-left: 3px solid transparent;
       transition: all 0.2s;
     }
-    
-    .toc-item:hover {
-      background: #F5F5F5;
-      color: var(--text);
-    }
-    
-    .toc-item.active {
-      background: #FFF5F5;
-      color: var(--primary);
-      border-left-color: var(--primary);
-      font-weight: 500;
-    }
-    
+    .toc-item:hover { background: #F5F5F5; color: var(--text); }
+    .toc-item.active { background: #FFF5F5; color: var(--primary); border-left-color: var(--primary); font-weight: 500; }
     .toc-item.level-2 { padding-left: 36px; font-size: 13px; }
     .toc-item.level-3 { padding-left: 52px; font-size: 12px; }
     
-    /* 阅读主区域 */
-    .reader-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
+    .reader-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
     .reader-header {
       background: white;
       padding: 16px 32px;
@@ -528,15 +359,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    
-    .reader-title {
-      font-size: 20px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
+    .reader-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 12px; }
     .reader-title .doc-type {
       font-size: 12px;
       padding: 4px 10px;
@@ -545,18 +368,8 @@
       color: var(--text-secondary);
       font-weight: normal;
     }
-    
-    .reader-actions {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .reader-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 40px;
-    }
-    
+    .reader-actions { display: flex; gap: 12px; }
+    .reader-content { flex: 1; overflow-y: auto; padding: 40px; }
     .reader-article {
       max-width: 800px;
       margin: 0 auto;
@@ -566,142 +379,35 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.05);
     }
     
-    /* Markdown 渲染样式 */
-    .markdown-body {
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text);
-    }
-    
-    .markdown-body h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin: 0 0 24px 0;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--primary);
-      color: var(--text);
-    }
-    
-    .markdown-body h2 {
-      font-size: 22px;
-      font-weight: 600;
-      margin: 40px 0 16px 0;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text);
-    }
-    
-    .markdown-body h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 32px 0 12px 0;
-      color: var(--text);
-    }
-    
-    .markdown-body h4 {
-      font-size: 16px;
-      font-weight: 600;
-      margin: 24px 0 8px 0;
-      color: var(--text);
-    }
-    
-    .markdown-body p {
-      margin: 16px 0;
-    }
-    
-    .markdown-body ul, .markdown-body ol {
-      margin: 16px 0;
-      padding-left: 24px;
-    }
-    
-    .markdown-body li {
-      margin: 8px 0;
-    }
-    
+    /* Markdown 样式 */
+    .markdown-body { font-size: 16px; line-height: 1.8; color: var(--text); }
+    .markdown-body h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px 0; padding-bottom: 16px; border-bottom: 2px solid var(--primary); }
+    .markdown-body h2 { font-size: 22px; font-weight: 600; margin: 40px 0 16px 0; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .markdown-body h3 { font-size: 18px; font-weight: 600; margin: 32px 0 12px 0; }
+    .markdown-body h4 { font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; }
+    .markdown-body p { margin: 16px 0; }
+    .markdown-body ul, .markdown-body ol { margin: 16px 0; padding-left: 24px; }
+    .markdown-body li { margin: 8px 0; }
     .markdown-body blockquote {
       margin: 20px 0;
       padding: 16px 20px;
       background: linear-gradient(135deg, #FFF5F5, #FFF0F0);
       border-left: 4px solid var(--primary);
       border-radius: 0 8px 8px 0;
-      color: var(--text);
     }
+    .markdown-body blockquote p { margin: 0; }
+    .markdown-body code { background: #F5F5F5; padding: 2px 6px; border-radius: 4px; font-family: 'Monaco', monospace; font-size: 14px; color: var(--primary); }
+    .markdown-body pre { background: #1E1E1E; color: #D4D4D4; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; }
+    .markdown-body pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
+    .markdown-body table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+    .markdown-body th { background: #FAFAFA; padding: 12px 16px; text-align: left; font-weight: 600; border: 1px solid var(--border); }
+    .markdown-body td { padding: 12px 16px; border: 1px solid var(--border); }
+    .markdown-body tr:hover td { background: #FAFAFA; }
+    .markdown-body hr { border: none; height: 1px; background: var(--border); margin: 32px 0; }
+    .markdown-body strong { font-weight: 600; }
+    .markdown-body a { color: var(--primary); text-decoration: none; }
+    .markdown-body a:hover { text-decoration: underline; }
     
-    .markdown-body blockquote p {
-      margin: 0;
-    }
-    
-    .markdown-body code {
-      background: #F5F5F5;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'Monaco', 'Menlo', monospace;
-      font-size: 14px;
-      color: var(--primary);
-    }
-    
-    .markdown-body pre {
-      background: #1E1E1E;
-      color: #D4D4D4;
-      padding: 20px;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin: 20px 0;
-    }
-    
-    .markdown-body pre code {
-      background: none;
-      padding: 0;
-      color: inherit;
-      font-size: 13px;
-    }
-    
-    .markdown-body table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-size: 14px;
-    }
-    
-    .markdown-body th {
-      background: #FAFAFA;
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      border: 1px solid var(--border);
-    }
-    
-    .markdown-body td {
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-    }
-    
-    .markdown-body tr:hover td {
-      background: #FAFAFA;
-    }
-    
-    .markdown-body hr {
-      border: none;
-      height: 1px;
-      background: var(--border);
-      margin: 32px 0;
-    }
-    
-    .markdown-body strong {
-      font-weight: 600;
-      color: var(--text);
-    }
-    
-    .markdown-body a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-    
-    .markdown-body a:hover {
-      text-decoration: underline;
-    }
-    
-    /* Responsive */
     @media (max-width: 768px) {
       .header { padding: 24px 16px; }
       .header h1 { font-size: 22px; }
@@ -712,16 +418,11 @@
       .doc-actions { width: 100%; margin-top: 12px; justify-content: flex-end; }
       .modal-overlay { padding: 16px; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      
       .reader-sidebar { display: none; }
       .reader-content { padding: 20px; }
       .reader-article { padding: 24px; }
       .reader-header { padding: 12px 16px; }
       .reader-title { font-size: 16px; }
-    }
-    
-    @media (max-width: 1024px) {
-      .reader-sidebar { width: 240px; }
     }
   </style>
 </head>
@@ -740,44 +441,24 @@
   </nav>
   
   <main class="container">
-    <!-- 项目概览 -->
     <section id="overview" class="section active">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="stat-docs">-</div>
-          <div class="stat-label">文档总数</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-issues">-</div>
-          <div class="stat-label">待解决问题</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">v1.0</div>
-          <div class="stat-label">当前版本</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-progress">-</div>
-          <div class="stat-label">问题解决率</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" id="stat-docs">-</div><div class="stat-label">文档总数</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-issues">-</div><div class="stat-label">待解决问题</div></div>
+        <div class="stat-card"><div class="stat-value">v1.0</div><div class="stat-label">当前版本</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-progress">-</div><div class="stat-label">问题解决率</div></div>
       </div>
-      
       <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">📋 项目信息</h2>
-        </div>
+        <div class="card-header"><h2 class="card-title">📋 项目信息</h2></div>
         <table class="issue-table">
           <tr><th style="width:120px">项目名称</th><td>蛋小厨</td></tr>
           <tr><th>产品定位</th><td>基于微信小程序的群体用餐决策工具</td></tr>
           <tr><th>核心功能</th><td>创建点餐投票 → 分享邀请 → 群体投票 → 结果统计</td></tr>
-          <tr><th>技术架构</th><td>微信小程序 + 云开发（云函数 + 云数据库）</td></tr>
-          <tr><th>数据同步</th><td>☁️ 云端实时同步，多人协作</td></tr>
+          <tr><th>数据存储</th><td>☁️ 微信云数据库，与小程序数据互通</td></tr>
         </table>
       </div>
-      
       <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">🚀 快速链接</h2>
-        </div>
+        <div class="card-header"><h2 class="card-title">🚀 快速链接</h2></div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
           <button class="btn btn-primary" onclick="switchSection('docs')">📄 查看文档</button>
           <button class="btn btn-secondary" onclick="switchSection('issues')">🐛 问题列表</button>
@@ -787,7 +468,6 @@
       </div>
     </section>
     
-    <!-- 文档管理 -->
     <section id="docs" class="section">
       <div class="card">
         <div class="card-header">
@@ -797,16 +477,12 @@
             <button class="btn btn-primary" onclick="openDocEditor()">➕ 新建文档</button>
           </div>
         </div>
-        <div class="doc-list" id="doc-list">
-          <div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div>
-        </div>
+        <div class="doc-list" id="doc-list"><div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div></div>
       </div>
     </section>
     
-    <!-- 问题跟踪 -->
     <section id="issues" class="section">
       <div class="stats-grid" id="issue-stats"></div>
-      
       <div class="card">
         <div class="card-header">
           <h2 class="card-title">🐛 问题列表</h2>
@@ -816,22 +492,12 @@
           </div>
         </div>
         <table class="issue-table">
-          <thead>
-            <tr>
-              <th style="width:60px">优先级</th>
-              <th>问题描述</th>
-              <th style="width:100px">状态</th>
-              <th style="width:120px">操作</th>
-            </tr>
-          </thead>
-          <tbody id="issue-list">
-            <tr><td colspan="4" class="loading"><div class="loading-spinner"></div></td></tr>
-          </tbody>
+          <thead><tr><th style="width:60px">优先级</th><th>问题描述</th><th style="width:100px">状态</th><th style="width:120px">操作</th></tr></thead>
+          <tbody id="issue-list"><tr><td colspan="4" class="loading"><div class="loading-spinner"></div></td></tr></tbody>
         </table>
       </div>
     </section>
     
-    <!-- 更新日志 -->
     <section id="changelog" class="section">
       <div class="card">
         <div class="card-header">
@@ -841,9 +507,7 @@
             <button class="btn btn-primary" onclick="openChangelogEditor()">➕ 添加记录</button>
           </div>
         </div>
-        <div class="timeline" id="changelog-list">
-          <div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div>
-        </div>
+        <div class="timeline" id="changelog-list"><div class="loading"><div class="loading-spinner"></div><p>加载中...</p></div></div>
       </div>
     </section>
   </main>
@@ -866,9 +530,7 @@
         </div>
       </header>
       <div class="reader-content" id="reader-content">
-        <article class="reader-article">
-          <div class="markdown-body" id="reader-body"></div>
-        </article>
+        <article class="reader-article"><div class="markdown-body" id="reader-body"></div></article>
       </div>
     </div>
   </div>
@@ -900,15 +562,13 @@
   <!-- 问题编辑器 -->
   <div class="modal-overlay" id="issue-editor">
     <div class="modal" style="max-width: 500px;">
-      <div class="modal-header">
-        <h3 id="issue-editor-title">新增问题</h3>
-      </div>
+      <div class="modal-header"><h3>新增问题</h3></div>
       <div class="modal-body">
         <div style="margin-bottom: 16px;">
           <label style="display: block; margin-bottom: 8px; font-weight: 600;">问题描述</label>
           <input type="text" id="issue-title" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" placeholder="请输入问题描述">
         </div>
-        <div style="margin-bottom: 16px;">
+        <div>
           <label style="display: block; margin-bottom: 8px; font-weight: 600;">优先级</label>
           <select id="issue-priority" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
             <option value="p0">P0 - 严重问题</option>
@@ -928,9 +588,7 @@
   <!-- 日志编辑器 -->
   <div class="modal-overlay" id="changelog-editor">
     <div class="modal" style="max-width: 500px;">
-      <div class="modal-header">
-        <h3>添加更新记录</h3>
-      </div>
+      <div class="modal-header"><h3>添加更新记录</h3></div>
       <div class="modal-body">
         <div style="margin-bottom: 16px;">
           <label style="display: block; margin-bottom: 8px; font-weight: 600;">日期</label>
@@ -948,63 +606,70 @@
     </div>
   </div>
   
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
   
   <script>
-    // API 基础地址
-    const API_BASE = '';
+    // ==================== 配置 ====================
+    var API_URL = 'https://cloud1-5gf9jz2m380b0685-1392482126.ap-shanghai.app.tcloudbase.com/docApi';
     
     // 状态
-    let documents = [];
-    let issues = [];
-    let changelog = [];
-    let editingDocId = null;
-    let currentReadingDocId = null;
+    var documents = [];
+    var issues = [];
+    var changelog = [];
+    var editingDocId = null;
+    var currentReadingDocId = null;
     
     // 工具函数
-    const $ = id => document.getElementById(id);
+    function $(id) { return document.getElementById(id); }
     
     function showToast(message, type) {
-      const toast = $('toast');
+      var toast = $('toast');
       toast.textContent = message;
       toast.className = 'toast show ' + (type || '');
       setTimeout(function() { toast.classList.remove('show'); }, 2500);
     }
     
     function setSyncStatus(status) {
-      const el = $('sync-status');
+      var el = $('sync-status');
       if (status === 'syncing') {
         el.textContent = '🔄 同步中...';
         el.className = 'sync-status syncing';
       } else if (status === 'error') {
         el.textContent = '❌ 连接失败';
-        el.className = 'sync-status';
+        el.className = 'sync-status error';
       } else {
         el.textContent = '☁️ 已连接云端';
         el.className = 'sync-status';
       }
     }
     
-    function api(method, path, data) {
+    // API 调用
+    function api(action, data) {
       setSyncStatus('syncing');
-      var options = {
-        method: method,
-        headers: { 'Content-Type': 'application/json' }
-      };
-      if (data) options.body = JSON.stringify(data);
       
-      return fetch(API_BASE + path, options)
-        .then(function(res) { return res.json(); })
-        .then(function(json) {
-          setSyncStatus('connected');
-          return json;
-        })
-        .catch(function(err) {
-          setSyncStatus('error');
-          console.error('API Error:', err);
-          throw err;
-        });
+      // 构建 URL 参数
+      var url = API_URL + '?action=' + encodeURIComponent(action);
+      if (data) {
+        url += '&data=' + encodeURIComponent(JSON.stringify(data));
+      }
+      
+      return fetch(url, {
+        method: 'GET',
+        mode: 'cors'
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(json) {
+        setSyncStatus('connected');
+        if (!json.success) {
+          throw new Error(json.error || '操作失败');
+        }
+        return json;
+      })
+      .catch(function(err) {
+        setSyncStatus('error');
+        console.error('API Error:', err);
+        throw err;
+      });
     }
     
     // 导航切换
@@ -1022,30 +687,20 @@
     }
     
     // ==================== 阅读模式 ====================
-    
     function openReader(docId) {
       var doc = documents.find(function(d) { return d._id === docId; });
       if (!doc) return;
       
       currentReadingDocId = docId;
-      
       var typeNames = { prd: 'PRD文档', test: '测试报告', marketing: '运营文档', design: '设计文档', custom: '其他' };
       
       $('reader-doc-title').textContent = doc.title;
       $('reader-doc-type').textContent = typeNames[doc.type] || '文档';
+      $('reader-body').innerHTML = marked.parse(doc.content || '');
       
-      // 渲染 Markdown
-      var html = marked.parse(doc.content || '');
-      $('reader-body').innerHTML = html;
-      
-      // 生成目录
       generateTOC();
-      
-      // 显示阅读器
       $('reader').classList.add('active');
       document.body.style.overflow = 'hidden';
-      
-      // 滚动到顶部
       $('reader-content').scrollTop = 0;
     }
     
@@ -1062,72 +717,52 @@
       
       headings.forEach(function(heading, index) {
         var level = parseInt(heading.tagName.charAt(1));
-        var id = 'heading-' + index;
-        heading.id = id;
+        heading.id = 'heading-' + index;
         
         var item = document.createElement('div');
         item.className = 'toc-item level-' + level;
         item.textContent = heading.textContent;
         item.onclick = function() {
           heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // 更新激活状态
           document.querySelectorAll('.toc-item').forEach(function(t) { t.classList.remove('active'); });
           item.classList.add('active');
         };
         toc.appendChild(item);
       });
       
-      // 默认第一个激活
-      if (toc.firstChild) {
-        toc.firstChild.classList.add('active');
-      }
+      if (toc.firstChild) toc.firstChild.classList.add('active');
       
-      // 监听滚动更新目录高亮
       $('reader-content').onscroll = function() {
         var scrollTop = $('reader-content').scrollTop;
         var activeIndex = 0;
-        
         headings.forEach(function(heading, index) {
-          if (heading.offsetTop - 100 <= scrollTop) {
-            activeIndex = index;
-          }
+          if (heading.offsetTop - 100 <= scrollTop) activeIndex = index;
         });
-        
         document.querySelectorAll('.toc-item').forEach(function(t, i) {
           t.classList.toggle('active', i === activeIndex);
         });
       };
     }
     
-    // 预览文档
     function previewDoc() {
       var title = $('doc-title').value || '未命名文档';
       var content = $('doc-content').value;
       var type = $('doc-type').value;
-      
       var tempDoc = { _id: 'preview', title: title, type: type, content: content };
       documents.push(tempDoc);
-      
       closeDocEditor();
       openReader('preview');
-      
-      // 移除临时文档
       documents = documents.filter(function(d) { return d._id !== 'preview'; });
     }
     
     // ==================== 文档管理 ====================
-    
     function loadDocuments() {
-      api('GET', '/api/documents')
+      api('getDocuments')
         .then(function(res) {
-          if (res.success) {
-            documents = res.data;
-            renderDocuments();
-          }
+          documents = res.data;
+          renderDocuments();
         })
-        .catch(function() {
-          showToast('加载文档失败', 'error');
-        });
+        .catch(function() { showToast('加载文档失败', 'error'); });
     }
     
     function renderDocuments() {
@@ -1146,25 +781,18 @@
           '<div class="doc-icon ' + doc.type + '" onclick="openReader(\'' + doc._id + '\')">' + (typeIcons[doc.type] || '📄') + '</div>' +
           '<div class="doc-info" onclick="openReader(\'' + doc._id + '\')">' +
             '<div class="doc-name">' + doc.title + '</div>' +
-            '<div class="doc-meta">' +
-              '<span>' + (typeNames[doc.type] || '文档') + '</span>' +
-              '<span>更新于 ' + date + '</span>' +
-            '</div>' +
+            '<div class="doc-meta"><span>' + (typeNames[doc.type] || '文档') + '</span><span>更新于 ' + date + '</span></div>' +
           '</div>' +
           '<div class="doc-actions">' +
             '<button class="btn btn-secondary" onclick="event.stopPropagation(); openReader(\'' + doc._id + '\')">👁️ 阅读</button>' +
             '<button class="btn btn-secondary" onclick="event.stopPropagation(); openDocEditor(\'' + doc._id + '\')">✏️ 编辑</button>' +
             '<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument(\'' + doc._id + '\')">🗑️</button>' +
-          '</div>' +
-        '</div>';
+          '</div></div>';
       }).join('');
     }
     
     function openDocEditor(id) {
       editingDocId = id || null;
-      var modal = $('doc-editor');
-      
-      // 如果在阅读模式，先关闭
       closeReader();
       
       if (id) {
@@ -1179,76 +807,46 @@
         $('doc-type').value = 'custom';
         $('doc-content').value = '';
       }
-      
-      modal.classList.add('active');
+      $('doc-editor').classList.add('active');
     }
     
-    function closeDocEditor() {
-      $('doc-editor').classList.remove('active');
-      editingDocId = null;
-    }
+    function closeDocEditor() { $('doc-editor').classList.remove('active'); editingDocId = null; }
     
     function saveDocument() {
       var title = $('doc-title').value.trim();
       var type = $('doc-type').value;
       var content = $('doc-content').value;
       
-      if (!title) {
-        showToast('请输入文档标题', 'error');
-        return;
-      }
-      
+      if (!title) { showToast('请输入文档标题', 'error'); return; }
       $('doc-save-btn').disabled = true;
       
-      var promise;
-      if (editingDocId) {
-        promise = api('PUT', '/api/documents/' + editingDocId, { title: title, type: type, content: content });
-      } else {
-        promise = api('POST', '/api/documents', { title: title, type: type, content: content });
-      }
+      var action = editingDocId ? 'updateDocument' : 'createDocument';
+      var data = { title: title, type: type, content: content };
+      if (editingDocId) data.id = editingDocId;
       
-      promise
+      api(action, data)
         .then(function() {
           showToast(editingDocId ? '文档已更新' : '文档已创建', 'success');
           closeDocEditor();
           loadDocuments();
           loadStats();
         })
-        .catch(function() {
-          showToast('保存失败', 'error');
-        })
-        .finally(function() {
-          $('doc-save-btn').disabled = false;
-        });
+        .catch(function() { showToast('保存失败', 'error'); })
+        .finally(function() { $('doc-save-btn').disabled = false; });
     }
     
     function deleteDocument(id) {
       if (!confirm('确定要删除这个文档吗？')) return;
-      
-      api('DELETE', '/api/documents/' + id)
-        .then(function() {
-          showToast('文档已删除', 'success');
-          loadDocuments();
-          loadStats();
-        })
-        .catch(function() {
-          showToast('删除失败', 'error');
-        });
+      api('deleteDocument', { id: id })
+        .then(function() { showToast('文档已删除', 'success'); loadDocuments(); loadStats(); })
+        .catch(function() { showToast('删除失败', 'error'); });
     }
     
     // ==================== 问题跟踪 ====================
-    
     function loadIssues() {
-      api('GET', '/api/issues')
-        .then(function(res) {
-          if (res.success) {
-            issues = res.data;
-            renderIssues();
-          }
-        })
-        .catch(function() {
-          showToast('加载问题列表失败', 'error');
-        });
+      api('getIssues')
+        .then(function(res) { issues = res.data; renderIssues(); })
+        .catch(function() { showToast('加载问题列表失败', 'error'); });
     }
     
     function renderIssues() {
@@ -1261,85 +859,47 @@
         '<div class="stat-card"><div class="stat-value"><span class="tag tag-p2">P2</span> ' + counts.p2 + '</div><div class="stat-label">一般问题</div></div>' +
         '<div class="stat-card"><div class="stat-value"><span class="tag tag-p3">P3</span> ' + counts.p3 + '</div><div class="stat-label">优化建议</div></div>';
       
-      var statusText = {
-        open: '<span style="color:#FAAD14">⏳ 待处理</span>',
-        doing: '<span style="color:#1890FF">🔧 进行中</span>',
-        done: '<span style="color:#52C41A">✅ 已完成</span>'
-      };
+      var statusText = { open: '<span style="color:#FAAD14">⏳ 待处理</span>', doing: '<span style="color:#1890FF">🔧 进行中</span>', done: '<span style="color:#52C41A">✅ 已完成</span>' };
       
       $('issue-list').innerHTML = issues.map(function(issue) {
-        return '<tr>' +
-          '<td><span class="tag tag-' + issue.priority + '">' + issue.priority.toUpperCase() + '</span></td>' +
-          '<td>' + issue.title + '</td>' +
-          '<td>' + (statusText[issue.status] || statusText.open) + '</td>' +
-          '<td>' +
-            '<select onchange="updateIssueStatus(\'' + issue._id + '\', this.value)" style="padding:4px 8px;border-radius:4px;border:1px solid #ddd;">' +
-              '<option value="open"' + (issue.status === 'open' ? ' selected' : '') + '>待处理</option>' +
-              '<option value="doing"' + (issue.status === 'doing' ? ' selected' : '') + '>进行中</option>' +
-              '<option value="done"' + (issue.status === 'done' ? ' selected' : '') + '>已完成</option>' +
-            '</select>' +
-          '</td>' +
-        '</tr>';
+        return '<tr><td><span class="tag tag-' + issue.priority + '">' + issue.priority.toUpperCase() + '</span></td>' +
+          '<td>' + issue.title + '</td><td>' + (statusText[issue.status] || statusText.open) + '</td>' +
+          '<td><select onchange="updateIssueStatus(\'' + issue._id + '\', this.value)" style="padding:4px 8px;border-radius:4px;border:1px solid #ddd;">' +
+            '<option value="open"' + (issue.status === 'open' ? ' selected' : '') + '>待处理</option>' +
+            '<option value="doing"' + (issue.status === 'doing' ? ' selected' : '') + '>进行中</option>' +
+            '<option value="done"' + (issue.status === 'done' ? ' selected' : '') + '>已完成</option></select></td></tr>';
       }).join('');
     }
     
     function openIssueEditor() {
-      $('issue-editor-title').textContent = '新增问题';
       $('issue-title').value = '';
       $('issue-priority').value = 'p2';
       $('issue-editor').classList.add('active');
     }
     
-    function closeIssueEditor() {
-      $('issue-editor').classList.remove('active');
-    }
+    function closeIssueEditor() { $('issue-editor').classList.remove('active'); }
     
     function saveIssue() {
       var title = $('issue-title').value.trim();
       var priority = $('issue-priority').value;
+      if (!title) { showToast('请输入问题描述', 'error'); return; }
       
-      if (!title) {
-        showToast('请输入问题描述', 'error');
-        return;
-      }
-      
-      api('POST', '/api/issues', { title: title, priority: priority })
-        .then(function() {
-          showToast('问题已添加', 'success');
-          closeIssueEditor();
-          loadIssues();
-          loadStats();
-        })
-        .catch(function() {
-          showToast('保存失败', 'error');
-        });
+      api('createIssue', { title: title, priority: priority })
+        .then(function() { showToast('问题已添加', 'success'); closeIssueEditor(); loadIssues(); loadStats(); })
+        .catch(function() { showToast('保存失败', 'error'); });
     }
     
     function updateIssueStatus(id, status) {
-      api('PUT', '/api/issues/' + id, { status: status })
-        .then(function() {
-          showToast('状态已更新', 'success');
-          loadIssues();
-          loadStats();
-        })
-        .catch(function() {
-          showToast('更新失败', 'error');
-        });
+      api('updateIssue', { id: id, status: status })
+        .then(function() { showToast('状态已更新', 'success'); loadIssues(); loadStats(); })
+        .catch(function() { showToast('更新失败', 'error'); });
     }
     
     // ==================== 更新日志 ====================
-    
     function loadChangelog() {
-      api('GET', '/api/changelog')
-        .then(function(res) {
-          if (res.success) {
-            changelog = res.data;
-            renderChangelog();
-          }
-        })
-        .catch(function() {
-          showToast('加载更新日志失败', 'error');
-        });
+      api('getChangelog')
+        .then(function(res) { changelog = res.data; renderChangelog(); })
+        .catch(function() { showToast('加载更新日志失败', 'error'); });
     }
     
     function renderChangelog() {
@@ -1347,15 +907,10 @@
         $('changelog-list').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><p>暂无更新记录</p></div>';
         return;
       }
-      
       $('changelog-list').innerHTML = changelog.map(function(log) {
-        return '<div class="timeline-item">' +
-          '<div class="timeline-date">' + log.date + '</div>' +
-          '<div class="timeline-content">' +
-            '<span>' + log.content + '</span>' +
-            '<button class="btn btn-danger" style="padding:4px 8px;font-size:12px;" onclick="deleteChangelog(\'' + log._id + '\')">🗑️</button>' +
-          '</div>' +
-        '</div>';
+        return '<div class="timeline-item"><div class="timeline-date">' + log.date + '</div>' +
+          '<div class="timeline-content"><span>' + log.content + '</span>' +
+          '<button class="btn btn-danger" style="padding:4px 8px;font-size:12px;" onclick="deleteChangelog(\'' + log._id + '\')">🗑️</button></div></div>';
       }).join('');
     }
     
@@ -1365,92 +920,53 @@
       $('changelog-editor').classList.add('active');
     }
     
-    function closeChangelogEditor() {
-      $('changelog-editor').classList.remove('active');
-    }
+    function closeChangelogEditor() { $('changelog-editor').classList.remove('active'); }
     
     function saveChangelog() {
       var date = $('changelog-date').value;
       var content = $('changelog-content').value.trim();
+      if (!content) { showToast('请输入更新内容', 'error'); return; }
       
-      if (!content) {
-        showToast('请输入更新内容', 'error');
-        return;
-      }
-      
-      api('POST', '/api/changelog', { date: date, content: content })
-        .then(function() {
-          showToast('记录已添加', 'success');
-          closeChangelogEditor();
-          loadChangelog();
-        })
-        .catch(function() {
-          showToast('保存失败', 'error');
-        });
+      api('createChangelog', { date: date, content: content })
+        .then(function() { showToast('记录已添加', 'success'); closeChangelogEditor(); loadChangelog(); })
+        .catch(function() { showToast('保存失败', 'error'); });
     }
     
     function deleteChangelog(id) {
       if (!confirm('确定要删除这条记录吗？')) return;
-      
-      api('DELETE', '/api/changelog/' + id)
-        .then(function() {
-          showToast('记录已删除', 'success');
-          loadChangelog();
-        })
-        .catch(function() {
-          showToast('删除失败', 'error');
-        });
+      api('deleteChangelog', { id: id })
+        .then(function() { showToast('记录已删除', 'success'); loadChangelog(); })
+        .catch(function() { showToast('删除失败', 'error'); });
     }
     
     // ==================== 统计 ====================
-    
     function loadStats() {
-      api('GET', '/api/stats')
+      api('getStats')
         .then(function(res) {
-          if (res.success) {
-            $('stat-docs').textContent = res.data.totalDocs;
-            $('stat-issues').textContent = res.data.openIssues;
-            $('stat-progress').textContent = res.data.progress + '%';
-          }
+          $('stat-docs').textContent = res.data.totalDocs;
+          $('stat-issues').textContent = res.data.openIssues;
+          $('stat-progress').textContent = res.data.progress + '%';
         })
-        .catch(function(err) {
-          console.error('加载统计失败', err);
-        });
+        .catch(function(err) { console.error('加载统计失败', err); });
     }
     
     // ==================== 初始化 ====================
-    
     function init() {
-      api('POST', '/api/init')
-        .catch(function() { console.log('初始化检查完成'); });
-      
-      Promise.all([
-        loadStats(),
-        loadDocuments(),
-        loadIssues(),
-        loadChangelog()
-      ]);
+      api('initData').catch(function() { console.log('初始化检查完成'); });
+      loadStats();
+      loadDocuments();
+      loadIssues();
+      loadChangelog();
     }
     
-    // 点击外部关闭弹窗
     document.querySelectorAll('.modal-overlay').forEach(function(modal) {
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.classList.remove('active');
-        }
-      });
+      modal.addEventListener('click', function(e) { if (e.target === modal) modal.classList.remove('active'); });
     });
     
-    // ESC 关闭阅读器
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if ($('reader').classList.contains('active')) {
-          closeReader();
-        }
-      }
+      if (e.key === 'Escape' && $('reader').classList.contains('active')) closeReader();
     });
     
-    // 启动
     init();
   </script>
 </body>
